@@ -4,18 +4,18 @@ import (
 	"log"
 	"net/http"
 
+	routes "github.com/DiTomasoUCC/arqui-software-I-tp-final-backend/app"
 	"github.com/gorilla/mux"
 )
 
 func YourHandler(w http.ResponseWriter, r *http.Request) {
-	w.Write([]byte("Gorilla!\n"))
+	w.Write([]byte("Home Page!\n"))
 }
 
 func main() {
-	r := mux.NewRouter()
-	// Routes consist of a path and a handler function.
-	r.HandleFunc("/", YourHandler)
-
-	// Bind to a port and pass our router in
-	log.Fatal(http.ListenAndServe(":8000", r))
+	router := mux.NewRouter()
+	router.HandleFunc("/", YourHandler)
+	routes.CourseRoutes(router)
+	routes.UserRoutes(router)
+	log.Fatal(http.ListenAndServe(":8000", router))
 }
