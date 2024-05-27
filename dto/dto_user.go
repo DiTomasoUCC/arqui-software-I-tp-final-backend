@@ -5,7 +5,7 @@ type UserDto struct {
 	Username string `json:"username"`
 	Name     string `json:"name"`
 	LastName string `json:"last_name"`
-	UserType string `json:"usertype"`
+	UserType bool   `json:"usertype"`
 }
 
 type UsersDto []UserDto
