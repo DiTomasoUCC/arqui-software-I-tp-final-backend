@@ -11,6 +11,6 @@ type User struct {
 	LastName     string
 	UserType     bool // true for instructor, false for student
 	PasswordHash string
-	CreatedAt    time.Time
-	UpdatedAt    time.Time
+	CreationTime time.Time
+	LastUpdated  time.Time
 }

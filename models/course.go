@@ -14,6 +14,6 @@ type Course struct {
 	Requirements string
 	Duration     int // Duration in hours
 	ImageURL     string
-	CreatedAt    time.Time
-	UpdatedAt    time.Time
+	CreationTime time.Time
+	LastUpdated  time.Time
 }
