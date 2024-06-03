@@ -1,11 +1,16 @@
 package models
 
+import (
+	"time"
+)
+
+// User represents a user in the system.
 type User struct {
-	Id       int      `gorm:"primaryKey"`
-	UserName string   `gorm:"varchar(600);not null"`
-	Name     string   `gorm:"varchar(500);not null"`
-	LastName string   `gorm:"varchar(500);not null"`
-	UserType bool     `gorm:"not null"`
-	Reviews  []Review `gorm:"foreignKey:UserID"`
-	Courses  []Course `gorm:"many2many:CourseActivity"`
+	ID           int    `gorm:"primary_key"`
+	UserName     string `gorm:"unique"`
+	LastName     string
+	UserType     bool // true for instructor, false for student
+	PasswordHash string
+	CreatedAt    time.Time
+	UpdatedAt    time.Time
 }

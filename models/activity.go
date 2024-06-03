@@ -1,8 +1,15 @@
 package models
 
+import (
+	"time"
+)
+
+// Activity represents an activity in a course.
 type Activity struct {
-	Id                  int    `gorm:"primaryKey"`
-	ActivityDescription string `gorm:"varchar(500);not null"`
-	UserID              uint   // Foreign key referencing User table
-	CourseID            uint   // Foreign key referencing Course table
+	ID          int `gorm:"primary_key"`
+	CourseID    int // Foreign key referencing Course.ID
+	UserID      int // Foreign key referencing User.ID
+	Description string
+	CreatedAt   time.Time
+	UpdatedAt   time.Time
 }

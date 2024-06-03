@@ -1,13 +1,16 @@
 package models
 
+import (
+	"time"
+)
+
+// Review represents a review of a course.
 type Review struct {
-	Id      int    `gorm:"primaryKey"`
-	Comment string `gorm:"varchar(500);not null"`
-	Stars   int    `gorm:"not null"`
-
-	UserID uint
-	User   User `gorm:"foreignKey:UserID"`
-
-	CourseID uint
-	Course   Course `gorm:"foreignKey:CourseID"`
+	ID        int `gorm:"primary_key"`
+	CourseID  int // Foreign key referencing Course.ID
+	UserID    int // Foreign key referencing User.ID
+	Comment   string
+	Stars     int
+	CreatedAt time.Time
+	UpdatedAt time.Time
 }

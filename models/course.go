@@ -1,14 +1,19 @@
 package models
 
-type Course struct {
-	Id           int    `gorm:"primaryKey"`
-	Name         string `gorm:"varchar(500);not null"`
-	Description  string `gorm:"varchar(500);not null"`
-	Instructor   int    `gorm:"varchar(500);not null"`
-	Category     string `gorm:"varchar(500);not null"`
-	Requirements string `gorm:"varchar(500);not null"`
-	Lenght       int    `gorm:"not null"`
+import (
+	"time"
+)
 
-	Users   []User   `gorm:"many2many:CourseActivity"`
-	Reviews []Review `gorm:"foreignKey:CourseID"`
+// Course represents a course in the system.
+type Course struct {
+	ID           int `gorm:"primary_key"`
+	Name         string
+	Description  string
+	InstructorID int // Foreign key referencing User.ID
+	Category     string
+	Requirements string
+	Duration     int // Duration in hours
+	ImageURL     string
+	CreatedAt    time.Time
+	UpdatedAt    time.Time
 }
