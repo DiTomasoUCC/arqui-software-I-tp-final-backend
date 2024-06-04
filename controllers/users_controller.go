@@ -8,26 +8,40 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func GetSingleUser(w http.ResponseWriter, r *http.Request) {
-	// Implement logic to get a single user
+func GetAllUsers(c *gin.Context) {
+	c.JSON(200, gin.H{
+		"mensaje": "metodo GET ALL Users",
+	})
 }
 
-func GetAllUsers(w http.ResponseWriter, r *http.Request) {
-	// Implement logic to get all users
+func GetSingleUser(c *gin.Context) {
+	id := c.Param("id")
+	c.JSON(200, gin.H{
+		"mensaje": "metodo GET single User / id= " + id,
+	})
 }
 
-func AddUser(w http.ResponseWriter, r *http.Request) {
-	// Implement logic to add a user (might be replaced by RegisterUser)
+func AddUser(c *gin.Context) {
+	c.JSON(200, gin.H{
+		"mensaje": "metodo POST",
+	})
 }
 
-func UpdateOneUser(w http.ResponseWriter, r *http.Request) {
-	// Implement logic to update a user
+func UpdateOneUser(c *gin.Context) {
+	id := c.Param("id")
+	c.JSON(200, gin.H{
+		"mensaje": "metodo PUT / id=" + id,
+	})
 }
 
-func DeleteUser(w http.ResponseWriter, r *http.Request) {
-	// Implement logic to delete a user
+func DeleteUser(c *gin.Context) {
+	id := c.Param("id")
+	c.JSON(200, gin.H{
+		"mensaje": "metodo DELETE / id=" + id,
+	})
 }
 
+// -----------------------------------------------------------------------------------------
 type UserController struct {
 	userService services.UserService
 }

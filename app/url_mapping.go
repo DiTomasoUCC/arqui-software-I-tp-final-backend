@@ -1,14 +1,22 @@
 package app
 
-import (
-	"github.com/DiTomasoUCC/arqui-software-I-tp-final-backend/controllers"
-)
+import "github.com/DiTomasoUCC/arqui-software-I-tp-final-backend/controllers"
+
+var prefix = "/api/v1/"
 
 func mapUrls() {
-	// User routes
-	userRouter := router.Group("/api/v1/users")
-	userRouter.POST("/register", controllers.RegisterUser)
-	userRouter.POST("/login", controllers.LoginUser)
 
-	// Other routes... (replace with your existing mappings)
+	//Courses endpoints
+	router.GET(prefix+"courses", controllers.GetAllCourses)
+	router.GET(prefix+"course/:id", controllers.GetAllCourses)
+	router.POST(prefix+"course", controllers.AddCourse)
+	router.PUT(prefix+"course/:id", controllers.UpdateOneCourse)
+	router.DELETE(prefix+"course/:id", controllers.DeleteCourse)
+
+	//Users endpoints
+	router.GET(prefix+"users", controllers.GetAllUsers)
+	router.GET(prefix+"user/:id", controllers.GetAllUsers)
+	router.POST(prefix+"user", controllers.AddUser)
+	router.PUT(prefix+"user/:id", controllers.UpdateOneUser)
+	router.DELETE(prefix+"user/:id", controllers.DeleteUser)
 }
