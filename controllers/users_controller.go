@@ -9,23 +9,23 @@ import (
 )
 
 func GetSingleUser(w http.ResponseWriter, r *http.Request) {
-
+	// Implement logic to get a single user
 }
 
 func GetAllUsers(w http.ResponseWriter, r *http.Request) {
-
+	// Implement logic to get all users
 }
 
 func AddUser(w http.ResponseWriter, r *http.Request) {
-
+	// Implement logic to add a user (might be replaced by RegisterUser)
 }
 
 func UpdateOneUser(w http.ResponseWriter, r *http.Request) {
-
+	// Implement logic to update a user
 }
 
 func DeleteUser(w http.ResponseWriter, r *http.Request) {
-
+	// Implement logic to delete a user
 }
 
 type UserController struct {
