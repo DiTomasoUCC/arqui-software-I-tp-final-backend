@@ -13,8 +13,9 @@ func GetAllCourses(c *gin.Context) {
 func GetSingleCourse(c *gin.Context) {
 	id := c.Param("id")
 	c.JSON(200, gin.H{
-		"mensaje": "metodo GET single course / id= " + id,
+		"mensaje": "metodo GET / id=" + id,
 	})
+
 }
 
 func AddCourse(c *gin.Context) {

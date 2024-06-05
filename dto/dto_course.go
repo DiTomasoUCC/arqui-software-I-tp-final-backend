@@ -1,13 +1,18 @@
 package dto
 
+import "time"
+
 type CourseDto struct {
-	CourseId     int     `json:"course_id"`
-	CourseName   string  `json:"course_name"`
-	Category     string  `json:"category"`
-	Length       float32 `json:"length"`
-	InstructorId int     `json:"instructor_id"`
-	Requirements string  `json:"requirements"`
-	Description  string  `json:"description"`
+	Id           int    `json:"course_id"`
+	Name         string `json:"course_name"`
+	Description  string `json:"description"`
+	InstructorId int    `json:"instructor_id"`
+	Category     string `json:"category"`
+	Requirements string `json:"requirements"`
+	Length       int    `json:"length"`
+	ImageURL     string
+	CreationTime time.Time
+	LastUpdated  time.Time
 }
 
 type CoursesDto []CourseDto

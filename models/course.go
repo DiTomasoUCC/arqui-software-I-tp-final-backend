@@ -12,7 +12,7 @@ type Course struct {
 	InstructorID int // Foreign key referencing User.ID
 	Category     string
 	Requirements string
-	Duration     int // Duration in hours
+	Length       int // Duration in hours
 	ImageURL     string
 	CreationTime time.Time
 	LastUpdated  time.Time
