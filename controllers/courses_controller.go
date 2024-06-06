@@ -5,7 +5,9 @@ import (
 	"strconv"
 	"strings"
 
+	"github.com/DiTomasoUCC/arqui-software-I-tp-final-backend/db"
 	"github.com/DiTomasoUCC/arqui-software-I-tp-final-backend/dto"
+	"github.com/DiTomasoUCC/arqui-software-I-tp-final-backend/models"
 	"github.com/DiTomasoUCC/arqui-software-I-tp-final-backend/services"
 	"github.com/gin-gonic/gin"
 )
@@ -55,9 +57,31 @@ func AddCourse(c *gin.Context) {
 
 func UpdateOneCourse(c *gin.Context) {
 	id := c.Param("id")
-	c.JSON(200, gin.H{
-		"mensaje": "metodo PUT / id=" + id,
-	})
+	courseID, err := strconv.Atoi(id) // Convert string ID to integer
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid course ID"})
+		return
+	}
+
+	var body dto.CourseDto
+
+	if err := c.ShouldBindJSON(&body); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	//VALIDAR DATOS
+
+	datos := models.Course{}
+	if err := db.GetDB().First(&datos, courseID); err.Error != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "No course found with that ID"})
+		return
+	} else {
+		datos.Name = body.Name
+		db.GetDB().Save(&datos)
+		c.JSON(http.StatusOK, gin.H{"Mensaje": "Course updated successfully"})
+	}
+
 }
 
 func DeleteCourse(c *gin.Context) {
