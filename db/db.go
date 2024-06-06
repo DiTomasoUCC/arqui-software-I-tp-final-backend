@@ -12,9 +12,17 @@ import (
 	"gorm.io/gorm"
 )
 
-var (
-	db *gorm.DB
-)
+var db *gorm.DB
+
+func GetDB() *gorm.DB {
+	if db == nil {
+		err := ConnectDatabase()
+		if err != nil {
+			log.Panicf("failed to connect database: %v", err)
+		}
+	}
+	return db
+}
 
 func ConnectDatabase() error {
 
