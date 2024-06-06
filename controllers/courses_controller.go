@@ -3,14 +3,27 @@ package controllers
 import (
 	"net/http"
 	"strconv"
+	"strings"
 
+	"github.com/DiTomasoUCC/arqui-software-I-tp-final-backend/dto"
 	"github.com/DiTomasoUCC/arqui-software-I-tp-final-backend/services"
 	"github.com/gin-gonic/gin"
 )
 
-func GetAllCourses(c *gin.Context) {
-	c.JSON(200, gin.H{
-		"mensaje": "metodo GET ALL courses",
+func SearchCourse(c *gin.Context) {
+
+	query := strings.TrimSpace(c.Query("q"))
+	results, err := services.SearchCourse(query)
+
+	if err != nil {
+		c.JSON(http.StatusNotFound, gin.H{
+			"error": err.Error(),
+		})
+		return
+	}
+
+	c.JSON(http.StatusOK, dto.CourseSearchResponse{
+		Results: results,
 	})
 }
 

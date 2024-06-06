@@ -17,10 +17,8 @@ type CourseDto struct {
 	LastUpdated  time.Time
 }
 
-type CourseFilters struct {
-	Name         string `json:"name"`
-	Category     string `json:"category"`
-	InstructorID int    `json:"instructor_id"`
+type CourseSearchResponse struct {
+	Results []CourseDto `json:"results"`
 }
 
 type CoursesDto []CourseDto

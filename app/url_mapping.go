@@ -7,7 +7,7 @@ var prefix = "/api/v1/"
 func mapUrls() {
 
 	//Courses endpoints
-	router.GET(prefix+"courses", controllers.GetAllCourses)
+	router.GET(prefix+"courses/search", controllers.SearchCourse) //example: http://localhost:8080/api/v1/courses/search?q=Go_lang_Course
 	router.GET(prefix+"course/:id", controllers.GetCourse)
 	router.POST(prefix+"course", controllers.AddCourse)
 	router.PUT(prefix+"course/:id", controllers.UpdateOneCourse)

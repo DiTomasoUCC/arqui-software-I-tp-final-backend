@@ -13,3 +13,12 @@ func SelectCourseByID(id int) (models.Course, error) {
 	}
 	return course, nil
 }
+
+func SelectCoursesWithFilter(query string) ([]models.Course, error) {
+	var courses []models.Course
+	result := db.GetDB().Where("name LIKE ? OR description LIKE ?", "%"+query+"%", "%"+query+"%").Find(&courses)
+	if result.Error != nil {
+		return nil, result.Error
+	}
+	return courses, nil
+}
