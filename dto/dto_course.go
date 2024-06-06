@@ -2,8 +2,6 @@ package dto
 
 import (
 	"time"
-
-	"github.com/DiTomasoUCC/arqui-software-I-tp-final-backend/models"
 )
 
 type CourseDto struct {
@@ -17,15 +15,6 @@ type CourseDto struct {
 	ImageURL     string
 	CreationTime time.Time
 	LastUpdated  time.Time
-}
-
-func ToCourseDto(course models.Course) CourseDto {
-	return CourseDto{
-		Id:          course.ID,
-		Name:        course.Name,
-		Description: course.Description,
-		// Add mapping for other fields
-	}
 }
 
 type CourseFilters struct {

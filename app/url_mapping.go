@@ -8,11 +8,10 @@ func mapUrls() {
 
 	//Courses endpoints
 	router.GET(prefix+"courses", controllers.GetAllCourses)
-	router.GET(prefix+"course/:id", controllers.GetSingleCourse)
+	router.GET(prefix+"course/:id", controllers.GetCourse)
 	router.POST(prefix+"course", controllers.AddCourse)
 	router.PUT(prefix+"course/:id", controllers.UpdateOneCourse)
 	router.DELETE(prefix+"course/:id", controllers.DeleteCourse)
-	router.GET("/courses/:id", controllers.GetCourse)
 
 	//Users endpoints
 	router.GET(prefix+"users", controllers.GetAllUsers)

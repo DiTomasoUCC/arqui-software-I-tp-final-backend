@@ -1,20 +1,15 @@
 package clients
 
 import (
-	"fmt"
-
+	"github.com/DiTomasoUCC/arqui-software-I-tp-final-backend/db"
 	"github.com/DiTomasoUCC/arqui-software-I-tp-final-backend/models"
-	"gorm.io/gorm"
 )
 
-var db *gorm.DB
-
-func SelectCourseByID(id int64) (models.Course, error) {
+func SelectCourseByID(id int) (models.Course, error) {
 	var course models.Course
-	result := db.First(&course, id)
-
+	result := db.GetDB().Where("id = ?", id).First(&course)
 	if result.Error != nil {
-		return models.Course{}, fmt.Errorf("not found user with ID: %d", id)
+		return models.Course{}, result.Error
 	}
 	return course, nil
 }
