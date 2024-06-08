@@ -78,6 +78,12 @@ func UpdateOneCourse(c *gin.Context) {
 		return
 	} else {
 		datos.Name = body.Name
+		datos.Description = body.Description
+		datos.Category = body.Category
+		datos.Requirements = body.Requirements
+		datos.Length = body.Length
+		datos.ImageURL = body.ImageURL
+
 		db.GetDB().Save(&datos)
 		c.JSON(http.StatusOK, gin.H{"Mensaje": "Course updated successfully"})
 	}
