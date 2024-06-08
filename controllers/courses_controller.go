@@ -2,7 +2,6 @@ package controllers
 
 import (
 	"net/http"
-	"regexp"
 	"strconv"
 	"strings"
 
@@ -67,42 +66,11 @@ func UpdateOneCourse(c *gin.Context) {
 	var body dto.CourseDto
 
 	if err := c.ShouldBindJSON(&body); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid JSON request body"})
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
-	// Comprehensive data validation
-
-	if body.Name == "" {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Course name cannot be empty"})
-		return
-	}
-
-	if len(body.Description) < 10 {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Course description must be at least 10 characters long"})
-		return
-	}
-
-	if len(body.Category) == 0 {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Course category cannot be empty"})
-		return
-	}
-
-	if len(body.Requirements) == 0 {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Course requirements cannot be empty"})
-		return
-	}
-
-	if body.Length <= 0 {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Course length must be a positive number of hours"})
-		return
-	}
-
-	// URL validation (consider using a dedicated library for robustness)
-	if body.ImageURL != "" && !isValidURL(body.ImageURL) {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid image URL format"})
-		return
-	}
+	//VALIDAR DATOS
 
 	datos := models.Course{}
 	if err := db.GetDB().First(&datos, courseID); err.Error != nil {
@@ -113,36 +81,7 @@ func UpdateOneCourse(c *gin.Context) {
 		db.GetDB().Save(&datos)
 		c.JSON(http.StatusOK, gin.H{"Mensaje": "Course updated successfully"})
 	}
-	// Update course data
-	datos.Name = body.Name
-	datos.Description = body.Description
-	datos.Category = body.Category
-	datos.Requirements = body.Requirements
-	datos.Length = body.Length
-	datos.ImageURL = body.ImageURL // Assuming ImageURL is a field in models.Course
 
-	if err := db.GetDB().Save(&datos); err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "An error occurred while updating course"})
-		return
-	}
-
-	c.JSON(http.StatusOK, gin.H{"message": "Course updated successfully"})
-}
-
-// isValidURL checks if the provided string is a valid URL using a basic regular expression
-func isValidURL(url string) bool {
-	// Regular expression to match basic URL format
-	regex := `^((http|https)://)(www\.)?[a-zA-Z0-9@:%._\+~#?&//=]*$`
-
-	// Create a Regex struct and compile the regex pattern
-	r, err := regexp.Compile(regex)
-	if err != nil {
-		// Handle potential compilation errors
-		return false
-	}
-
-	// Match the input string against the regex
-	return r.MatchString(url)
 }
 
 func DeleteCourse(c *gin.Context) {
