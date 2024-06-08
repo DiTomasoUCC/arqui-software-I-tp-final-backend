@@ -71,6 +71,30 @@ func UpdateOneCourse(c *gin.Context) {
 	}
 
 	//VALIDAR DATOS
+	if body.Name == "" {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Course name cannot be empty"})
+		return
+	}
+
+	if len(body.Description) < 10 {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Course description must be at least 10 characters long"})
+		return
+	}
+
+	if len(body.Category) == 0 {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Course category cannot be empty"})
+		return
+	}
+
+	if len(body.Requirements) == 0 {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Course requirements cannot be empty"})
+		return
+	}
+
+	if body.Length <= 0 {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Course length must be a positive number of hours"})
+		return
+	}
 
 	datos := models.Course{}
 	if err := db.GetDB().First(&datos, courseID); err.Error != nil {
