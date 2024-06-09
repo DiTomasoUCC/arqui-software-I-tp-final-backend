@@ -14,4 +14,12 @@ type UserDto struct {
 	LastUpdated  time.Time
 }
 
-type UsersDto []UserDto
+type LoginDto struct {
+	Email    string `json:"email"`
+	Password string `json:"password"`
+}
+
+type LoginResponseDto struct {
+	UserName string `json:"username"`
+	Token    string `json:"token"`
+}

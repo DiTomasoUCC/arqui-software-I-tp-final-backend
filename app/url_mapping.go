@@ -16,6 +16,7 @@ func mapUrls() {
 	//Users endpoints
 	router.GET(prefix+"user/:id", controllers.GetUser)
 	router.POST(prefix+"user/register", controllers.UserRegister)
+	router.POST(prefix+"user/login", controllers.UserLogin)
 	router.PUT(prefix+"user/:id", controllers.UpdateUser)
 	router.DELETE(prefix+"user/:id", controllers.DeleteUser)
 }

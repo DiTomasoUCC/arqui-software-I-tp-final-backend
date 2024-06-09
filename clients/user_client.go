@@ -14,6 +14,15 @@ func SelectUserByID(id int) (models.User, error) {
 	return user, nil
 }
 
+func SelectUserByEmail(email string) (models.User, error) {
+	var user models.User
+	result := db.GetDB().Where("email = ?", email).First(&user)
+	if result.Error != nil {
+		return models.User{}, result.Error
+	}
+	return user, nil
+}
+
 func CreateUser(email string, username string, firstName string, lastName string, userType bool, passwordHash string) (models.User, error) {
 	user := models.User{
 		Email:        email,

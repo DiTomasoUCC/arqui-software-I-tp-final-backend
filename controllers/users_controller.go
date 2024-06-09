@@ -51,6 +51,27 @@ func UserRegister(c *gin.Context) {
 
 }
 
+func UserLogin(c *gin.Context) {
+	var body dto.LoginDto
+
+	if err := c.ShouldBindJSON(&body); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	loginDto, err := services.LoginUser(body)
+
+	if err != nil {
+		c.JSON(http.StatusNotFound, gin.H{
+			"error": err.Error(),
+		})
+		return
+	}
+
+	c.JSON(http.StatusOK, loginDto)
+
+}
+
 func UpdateUser(c *gin.Context) {
 
 }

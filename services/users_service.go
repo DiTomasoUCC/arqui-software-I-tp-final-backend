@@ -2,11 +2,39 @@ package services
 
 import (
 	"fmt"
+	"os"
+	"time"
 
 	"github.com/DiTomasoUCC/arqui-software-I-tp-final-backend/clients"
 	"github.com/DiTomasoUCC/arqui-software-I-tp-final-backend/dto"
+	"github.com/golang-jwt/jwt"
+	"github.com/joho/godotenv"
 	"golang.org/x/crypto/bcrypt"
 )
+
+func GenerateJWT(email string, username string, id int) (string, error) {
+	errorVariable := godotenv.Load()
+	if errorVariable != nil {
+		panic("Error loading .env file")
+	}
+
+	jwtKey := os.Getenv("SECRET_JWT")
+	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
+		"email":    email,
+		"username": username,
+		"id":       id,
+		"iat":      time.Now().Unix(),
+		"exp":      time.Now().Add(time.Hour * 24).Unix(), //24 hours
+	})
+
+	tokenString, err := token.SignedString([]byte(jwtKey))
+
+	if err != nil {
+		return "", err
+	}
+
+	return tokenString, err
+}
 
 func HashPassword(password string) string {
 	cost := 10
@@ -52,6 +80,31 @@ func CreateUser(userDto dto.UserDto) (dto.UserDto, error) {
 		PasswordHash: user.PasswordHash,
 		CreationTime: user.CreationTime,
 		LastUpdated:  user.LastUpdated,
+	}, nil
+}
+
+func LoginUser(loginDto dto.LoginDto) (dto.LoginResponseDto, error) {
+	user, err := clients.SelectUserByEmail(loginDto.Email)
+
+	if err != nil {
+		return dto.LoginResponseDto{}, fmt.Errorf("error getting course from DB: %w", err)
+	}
+
+	err = bcrypt.CompareHashAndPassword([]byte(user.PasswordHash), []byte(loginDto.Password))
+
+	if err != nil {
+		return dto.LoginResponseDto{}, fmt.Errorf("error getting course from DB: %w", err)
+	}
+
+	jwtKey, errJWT := GenerateJWT(user.Email, user.UserName, user.ID)
+
+	if errJWT != nil {
+		return dto.LoginResponseDto{}, fmt.Errorf("error getting course from DB: %w", errJWT)
+	}
+
+	return dto.LoginResponseDto{
+		UserName: user.UserName,
+		Token:    jwtKey,
 	}, nil
 }
 
