@@ -5,9 +5,7 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/DiTomasoUCC/arqui-software-I-tp-final-backend/db"
 	"github.com/DiTomasoUCC/arqui-software-I-tp-final-backend/dto"
-	"github.com/DiTomasoUCC/arqui-software-I-tp-final-backend/models"
 	"github.com/DiTomasoUCC/arqui-software-I-tp-final-backend/services"
 	"github.com/gin-gonic/gin"
 )
@@ -108,13 +106,15 @@ func DeleteCourse(c *gin.Context) {
 		return
 	}
 
-	datos := models.Course{}
-	if err := db.GetDB().First(&datos, courseID); err.Error != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "No course found with that ID"})
+	err = services.DeleteCourse(courseID)
+
+	if err != nil {
+		c.JSON(http.StatusNotFound, gin.H{
+			"error": err.Error(),
+		})
 		return
-	} else {
-		db.GetDB().Delete(&datos)
-		c.JSON(http.StatusOK, gin.H{"Mensaje": "Course deleted successfully"})
 	}
+
+	c.JSON(http.StatusOK, gin.H{"message": "Course deleted successfully"})
 
 }

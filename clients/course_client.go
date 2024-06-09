@@ -58,3 +58,11 @@ func UpdateCourse(id int, name string, desc string, category string, req string,
 	}
 	return course, nil
 }
+
+func DeleteCourse(id int) error {
+	result := db.GetDB().Where("id = ?", id).Delete(&models.Course{})
+	if result.Error != nil {
+		return result.Error
+	}
+	return nil
+}

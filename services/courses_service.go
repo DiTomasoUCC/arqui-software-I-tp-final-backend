@@ -123,3 +123,13 @@ func UpdateCourse(id int, body dto.CourseDto) (dto.CourseDto, error) {
 		LastUpdated:  course.LastUpdated,
 	}, nil
 }
+
+func DeleteCourse(id int) error {
+	err := clients.DeleteCourse(id)
+
+	if err != nil {
+		return fmt.Errorf("error deleting course from DB: %w", err)
+	}
+
+	return nil
+}
