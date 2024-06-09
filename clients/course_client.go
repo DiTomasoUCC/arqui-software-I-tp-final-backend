@@ -22,3 +22,22 @@ func SelectCoursesWithFilter(query string) ([]models.Course, error) {
 	}
 	return courses, nil
 }
+
+func CreateCourse(name string, desc string, instruct int, category string, req string, length int, img string) (models.Course, error) {
+	course := models.Course{
+		Name:         name,
+		Description:  desc,
+		InstructorID: instruct,
+		Category:     category,
+		Requirements: req,
+		Length:       length,
+		ImageURL:     img,
+		CreationTime: db.GetDB().NowFunc(),
+		LastUpdated:  db.GetDB().NowFunc(),
+	}
+	result := db.GetDB().Create(&course)
+	if result.Error != nil {
+		return models.Course{}, result.Error
+	}
+	return course, nil
+}

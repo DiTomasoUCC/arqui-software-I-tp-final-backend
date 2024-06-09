@@ -56,3 +56,24 @@ func SearchCourse(query string) ([]dto.CourseDto, error) {
 
 	return results, nil
 }
+
+func AddCourse(courseDto dto.CourseDto) (dto.CourseDto, error) {
+	course, err := clients.CreateCourse(courseDto.Name, courseDto.Description, courseDto.InstructorId, courseDto.Category, courseDto.Requirements, courseDto.Length, courseDto.ImageURL)
+
+	if err != nil {
+		return dto.CourseDto{}, fmt.Errorf("error creating course in DB: %w", err)
+	}
+
+	return dto.CourseDto{
+		Id:           course.ID,
+		Name:         course.Name,
+		Description:  course.Description,
+		InstructorId: course.InstructorID,
+		Category:     course.Category,
+		Requirements: course.Requirements,
+		Length:       course.Length,
+		ImageURL:     course.ImageURL,
+		CreationTime: course.CreationTime,
+		LastUpdated:  course.LastUpdated,
+	}, nil
+}

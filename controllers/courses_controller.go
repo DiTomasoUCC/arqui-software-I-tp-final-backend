@@ -50,9 +50,26 @@ func GetCourse(c *gin.Context) {
 }
 
 func AddCourse(c *gin.Context) {
-	c.JSON(200, gin.H{
-		"mensaje": "metodo POST",
-	})
+	var body dto.CourseDto
+
+	if err := c.ShouldBindJSON(&body); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	//Validar Datos en services? (Ver tema de validacion de InstructorID)
+
+	courseDto, err := services.AddCourse(body)
+
+	if err != nil {
+		c.JSON(http.StatusNotFound, gin.H{
+			"error": err.Error(),
+		})
+		return
+	}
+
+	c.JSON(http.StatusOK, courseDto)
+
 }
 
 func UpdateOneCourse(c *gin.Context) {
@@ -105,6 +122,7 @@ func UpdateOneCourse(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "No course found with that ID"})
 		return
 	} else {
+
 		datos.Name = body.Name
 		datos.Description = body.Description
 		datos.Category = body.Category
@@ -121,7 +139,19 @@ func UpdateOneCourse(c *gin.Context) {
 
 func DeleteCourse(c *gin.Context) {
 	id := c.Param("id")
-	c.JSON(200, gin.H{
-		"mensaje": "metodo DELETE / id=" + id,
-	})
+	courseID, err := strconv.Atoi(id) // Convert string ID to integer
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid course ID"})
+		return
+	}
+
+	datos := models.Course{}
+	if err := db.GetDB().First(&datos, courseID); err.Error != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "No course found with that ID"})
+		return
+	} else {
+		db.GetDB().Delete(&datos)
+		c.JSON(http.StatusOK, gin.H{"Mensaje": "Course deleted successfully"})
+	}
+
 }
