@@ -41,3 +41,20 @@ func CreateCourse(name string, desc string, instruct int, category string, req s
 	}
 	return course, nil
 }
+
+func UpdateCourse(id int, name string, desc string, category string, req string, length int, img string) (models.Course, error) {
+	course := models.Course{
+		Name:         name,
+		Description:  desc,
+		Category:     category,
+		Requirements: req,
+		Length:       length,
+		ImageURL:     img,
+		LastUpdated:  db.GetDB().NowFunc(),
+	}
+	result := db.GetDB().Model(&models.Course{}).Where("id = ?", id).Updates(&course)
+	if result.Error != nil {
+		return models.Course{}, result.Error
+	}
+	return course, nil
+}

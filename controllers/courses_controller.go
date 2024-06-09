@@ -87,53 +87,16 @@ func UpdateOneCourse(c *gin.Context) {
 		return
 	}
 
-	if body.Name == "" {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Course name cannot be empty"})
+	courseDto, err := services.UpdateCourse(courseID, body)
+
+	if err != nil {
+		c.JSON(http.StatusNotFound, gin.H{
+			"error": err.Error(),
+		})
 		return
 	}
 
-	if len(body.Description) < 10 {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Course description must be at least 10 characters long"})
-		return
-	}
-
-	if len(body.Category) == 0 {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Course category cannot be empty"})
-		return
-	}
-
-	if len(body.Requirements) == 0 {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Course requirements cannot be empty"})
-		return
-	}
-
-	if body.Length <= 0 {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Course length must be a positive number of hours"})
-		return
-	}
-
-	if !strings.HasPrefix(body.ImageURL, "http") {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid image URL"})
-		return
-	}
-
-	datos := models.Course{}
-	if err := db.GetDB().First(&datos, courseID); err.Error != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "No course found with that ID"})
-		return
-	} else {
-
-		datos.Name = body.Name
-		datos.Description = body.Description
-		datos.Category = body.Category
-		datos.Requirements = body.Requirements
-		datos.Length = body.Length
-		datos.ImageURL = body.ImageURL
-		datos.LastUpdated = db.GetDB().NowFunc()
-
-		db.GetDB().Save(&datos)
-		c.JSON(http.StatusOK, gin.H{"Mensaje": "Course updated successfully"})
-	}
+	c.JSON(http.StatusOK, courseDto)
 
 }
 
