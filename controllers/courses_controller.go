@@ -70,7 +70,6 @@ func UpdateOneCourse(c *gin.Context) {
 		return
 	}
 
-	//VALIDAR DATOS
 	if body.Name == "" {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Course name cannot be empty"})
 		return
@@ -96,6 +95,11 @@ func UpdateOneCourse(c *gin.Context) {
 		return
 	}
 
+	if !strings.HasPrefix(body.ImageURL, "http") {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid image URL"})
+		return
+	}
+
 	datos := models.Course{}
 	if err := db.GetDB().First(&datos, courseID); err.Error != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "No course found with that ID"})
@@ -107,6 +111,7 @@ func UpdateOneCourse(c *gin.Context) {
 		datos.Requirements = body.Requirements
 		datos.Length = body.Length
 		datos.ImageURL = body.ImageURL
+		datos.LastUpdated = db.GetDB().NowFunc()
 
 		db.GetDB().Save(&datos)
 		c.JSON(http.StatusOK, gin.H{"Mensaje": "Course updated successfully"})

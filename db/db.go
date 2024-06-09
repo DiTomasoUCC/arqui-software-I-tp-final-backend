@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"log"
 	"os"
-	"time"
 
 	"github.com/DiTomasoUCC/arqui-software-I-tp-final-backend/models"
 	"github.com/joho/godotenv"
@@ -44,20 +43,6 @@ func ConnectDatabase() error {
 	if err != nil {
 		return fmt.Errorf("failed to auto-migrate: %w", err)
 	}
-
-	course := models.Course{
-		Name:         "Go lang Course",
-		Description:  "curso de go lang",
-		InstructorID: 2,
-		Category:     "prog",
-		Requirements: "nada",
-		Length:       5,
-		ImageURL:     "IMAGE",
-		CreationTime: time.Now().UTC(),
-		LastUpdated:  time.Now().UTC(),
-	}
-
-	db.Create(&course)
 
 	return nil
 }
