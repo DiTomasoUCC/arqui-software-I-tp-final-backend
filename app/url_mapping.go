@@ -14,8 +14,7 @@ func mapUrls() {
 	router.DELETE(prefix+"course/:id", controllers.DeleteCourse)
 
 	//Users endpoints
-	router.GET(prefix+"users", controllers.GetAllUsers)
-	router.GET(prefix+"user/:id", controllers.GetAllUsers)
+	router.GET(prefix+"user/:id", controllers.GetUser)
 	router.POST(prefix+"user", controllers.AddUser)
 	router.PUT(prefix+"user/:id", controllers.UpdateOneUser)
 	router.DELETE(prefix+"user/:id", controllers.DeleteUser)
