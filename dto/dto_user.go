@@ -20,6 +20,6 @@ type LoginDto struct {
 }
 
 type LoginResponseDto struct {
-	UserName string `json:"username"`
-	Token    string `json:"token"`
+	UserId int    `json:"id"`
+	Token  string `json:"token"`
 }

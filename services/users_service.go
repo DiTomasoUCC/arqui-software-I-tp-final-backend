@@ -103,8 +103,8 @@ func LoginUser(loginDto dto.LoginDto) (dto.LoginResponseDto, error) {
 	}
 
 	return dto.LoginResponseDto{
-		UserName: loginDto.Password,
-		Token:    jwtKey,
+		UserId: user.ID,
+		Token:  jwtKey,
 	}, nil
 }
 
