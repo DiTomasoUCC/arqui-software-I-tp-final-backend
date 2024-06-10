@@ -6,7 +6,7 @@ import (
 
 // User represents a user in the system.
 type User struct {
-	ID           int    `gorm:"primary_key"`
+	ID           int    `gorm:"primaryKey;autoIncrement"`
 	Email        string `gorm:"unique"`
 	UserName     string `gorm:"unique"`
 	FirstName    string
