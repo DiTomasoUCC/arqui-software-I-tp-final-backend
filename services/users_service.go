@@ -88,6 +88,7 @@ func CreateUser(userDto dto.UserDto) (dto.UserDto, error) {
 func LoginUser(loginDto dto.LoginDto) (dto.LoginResponseDto, error) {
 	user, err := clients.SelectUserByEmail(loginDto.Email)
 
+	//VER ERRORES
 	if err != nil {
 		return dto.LoginResponseDto{}, fmt.Errorf("error getting course from DB: %w", err)
 	}
@@ -95,7 +96,7 @@ func LoginUser(loginDto dto.LoginDto) (dto.LoginResponseDto, error) {
 	err = bcrypt.CompareHashAndPassword([]byte(user.PasswordHash), []byte(loginDto.Password))
 
 	if err != nil {
-		return dto.LoginResponseDto{}, fmt.Errorf("pass: "+loginDto.Password+"error getting course from DB: %w", err)
+		return dto.LoginResponseDto{}, fmt.Errorf("error getting course from DB: %w", err)
 	}
 
 	jwtKey, errJWT := GenerateJWT(user.Email, user.UserName, user.ID)
