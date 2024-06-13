@@ -27,11 +27,11 @@ func GetSubscribedUsers(courseId int) ([]models.User, error) {
 	return users, nil
 }
 
-func SelectSubscription(courseId int, userId int) models.Subscription {
+func SelectSubscription(courseId int, userId int) (models.Subscription, error) {
 	var subscription models.Subscription
 	result := db.GetDB().Where("course_id = ? AND user_id = ?", courseId, userId).First(&subscription)
 	if result.Error != nil {
-		return models.Subscription{}
+		return models.Subscription{}, result.Error
 	}
-	return subscription
+	return subscription, nil
 }

@@ -1,6 +1,7 @@
 package services
 
 import (
+	"errors"
 	"fmt"
 	"os"
 	"time"
@@ -10,6 +11,7 @@ import (
 	"github.com/golang-jwt/jwt"
 	"github.com/joho/godotenv"
 	"golang.org/x/crypto/bcrypt"
+	"gorm.io/gorm"
 )
 
 func GenerateJWT(email string, username string, id int) (string, error) {
@@ -117,8 +119,14 @@ func DeleteUser(id int) error {
 	return nil
 }
 
-func isUserSubscribed(user_id int, course_id int) bool {
-	subscription := clients.SelectSubscription(user_id, course_id)
+func isUserSubscribed(user_id int, course_id int) (bool, error) {
+	subscription, err := clients.SelectSubscription(user_id, course_id)
 
-	return subscription.ID != 0
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return false, nil
+		}
+		return false, fmt.Errorf("error getting course from DB: %w", err)
+	}
+	return subscription.ID != 0, nil
 }

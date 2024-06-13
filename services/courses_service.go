@@ -15,7 +15,11 @@ func GetCourseWithBool(user_id int, course_id int) (dto.GetCourseResponse, error
 		return dto.GetCourseResponse{}, fmt.Errorf("error getting course from DB: %w", err)
 	}
 
-	isSubscribed := isUserSubscribed(user_id, course_id)
+	isSubscribed, err := isUserSubscribed(user_id, course_id)
+
+	if err != nil {
+		return dto.GetCourseResponse{}, err
+	}
 
 	return dto.GetCourseResponse{
 		Id:           course.ID,
