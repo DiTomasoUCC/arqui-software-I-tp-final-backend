@@ -19,4 +19,8 @@ func mapUrls() {
 	router.POST(prefix+"user/login", controllers.UserLogin)
 	router.PUT(prefix+"user/:id", controllers.UpdateUser)
 	router.DELETE(prefix+"user/:id", controllers.DeleteUser)
+
+	//Subscriptions endpoints
+	router.GET(prefix+"subscriptions/:course_id", controllers.GetSubscribedUsers)
+	router.POST(prefix+"subscription", controllers.AddSubscription)
 }

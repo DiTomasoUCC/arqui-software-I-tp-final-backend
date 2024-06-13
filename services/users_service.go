@@ -116,3 +116,9 @@ func DeleteUser(id int) error {
 	}
 	return nil
 }
+
+func isUserSubscribed(user_id int, course_id int) bool {
+	subscription := clients.SelectSubscription(user_id, course_id)
+
+	return subscription.ID != 0
+}

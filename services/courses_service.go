@@ -8,6 +8,30 @@ import (
 	"github.com/DiTomasoUCC/arqui-software-I-tp-final-backend/dto"
 )
 
+func GetCourseWithBool(user_id int, course_id int) (dto.GetCourseResponse, error) {
+	course, err := clients.SelectCourseByID(course_id)
+
+	if err != nil {
+		return dto.GetCourseResponse{}, fmt.Errorf("error getting course from DB: %w", err)
+	}
+
+	isSubscribed := isUserSubscribed(user_id, course_id)
+
+	return dto.GetCourseResponse{
+		Id:           course.ID,
+		Name:         course.Name,
+		Description:  course.Description,
+		InstructorId: course.InstructorID,
+		Category:     course.Category,
+		Requirements: course.Requirements,
+		Length:       course.Length,
+		ImageURL:     course.ImageURL,
+		CreationTime: course.CreationTime,
+		LastUpdated:  course.LastUpdated,
+		IsSubscribed: isSubscribed,
+	}, nil
+}
+
 func GetCourse(id int) (dto.CourseDto, error) {
 	course, err := clients.SelectCourseByID(id)
 

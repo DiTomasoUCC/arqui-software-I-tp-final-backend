@@ -35,7 +35,7 @@ func GetCourse(c *gin.Context) {
 		return
 	}
 
-	courseDto, err := services.GetCourse(courseID)
+	courseDto, err := services.GetCourseWithBool(1, courseID)
 
 	if err != nil {
 		c.JSON(http.StatusNotFound, gin.H{
@@ -46,6 +46,26 @@ func GetCourse(c *gin.Context) {
 
 	c.JSON(http.StatusOK, courseDto)
 }
+
+// func GetCourse(c *gin.Context) {
+// 	id := c.Param("id")
+// 	courseID, err := strconv.Atoi(id) // Convert string ID to integer
+// 	if err != nil {
+// 		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid course ID"})
+// 		return
+// 	}
+
+// 	courseDto, err := services.GetCourse(courseID)
+
+// 	if err != nil {
+// 		c.JSON(http.StatusNotFound, gin.H{
+// 			"error": err.Error(),
+// 		})
+// 		return
+// 	}
+
+// 	c.JSON(http.StatusOK, courseDto)
+// }
 
 func AddCourse(c *gin.Context) {
 	var body dto.CourseDto
