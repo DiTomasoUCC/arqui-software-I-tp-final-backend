@@ -96,3 +96,15 @@ func DeleteUser(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"message": "User deleted successfully"})
 
 }
+
+func LogoutHandler(c *gin.Context) {
+	// Delegate logout logic to service layer (if applicable)
+	err := services.Logout(c.Request.Context(), c.Writer) // Call Logout function from services with context and response writer
+
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"message": "Logged out successfully"})
+}

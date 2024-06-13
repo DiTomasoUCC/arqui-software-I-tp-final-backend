@@ -1,7 +1,9 @@
 package services
 
 import (
+	"context"
 	"fmt"
+	"net/http"
 	"os"
 	"time"
 
@@ -115,4 +117,10 @@ func DeleteUser(id int) error {
 		return fmt.Errorf("error getting course from DB: %w", err)
 	}
 	return nil
+}
+
+func Logout(ctx context.Context, w http.ResponseWriter) error {
+	// ... (existing code for logout logic)
+	err := clients.InvalidateToken(ctx, w) // Provide the response writer argument
+	return err
 }

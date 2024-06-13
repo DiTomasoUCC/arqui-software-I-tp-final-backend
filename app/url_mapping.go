@@ -19,4 +19,5 @@ func mapUrls() {
 	router.POST(prefix+"user/login", controllers.UserLogin)
 	router.PUT(prefix+"user/:id", controllers.UpdateUser)
 	router.DELETE(prefix+"user/:id", controllers.DeleteUser)
+	router.POST(prefix+"user/logout", controllers.LogoutHandler)
 }

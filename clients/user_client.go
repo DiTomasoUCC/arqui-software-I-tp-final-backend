@@ -1,6 +1,9 @@
 package clients
 
 import (
+	"context"
+	"net/http"
+
 	"github.com/DiTomasoUCC/arqui-software-I-tp-final-backend/db"
 	"github.com/DiTomasoUCC/arqui-software-I-tp-final-backend/models"
 )
@@ -46,5 +49,19 @@ func DeleteUser(id int) error {
 	if result.Error != nil {
 		return result.Error
 	}
+	return nil
+}
+
+func InvalidateToken(ctx context.Context, w http.ResponseWriter) error {
+	// Assuming you store the JWT token in a cookie named "jwt_token"
+	cookie := &http.Cookie{
+		Name:     "jwt_token",
+		Value:    "",
+		MaxAge:   -1, // Expire immediately
+		Path:     "/",
+		HttpOnly: true, // Prevent client-side JavaScript access
+		Secure:   true, // Use only on HTTPS connections (if applicable)
+	}
+	http.SetCookie(w, cookie)
 	return nil
 }
