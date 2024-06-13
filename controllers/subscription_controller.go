@@ -5,11 +5,23 @@ import (
 	"strconv"
 
 	"github.com/DiTomasoUCC/arqui-software-I-tp-final-backend/dto"
+	"github.com/DiTomasoUCC/arqui-software-I-tp-final-backend/middleware"
 	"github.com/DiTomasoUCC/arqui-software-I-tp-final-backend/services"
 	"github.com/gin-gonic/gin"
 )
 
 func GetUserCourses(c *gin.Context) {
+	cook, err := c.Cookie("auth")
+	if err != nil {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized"})
+		return
+	}
+
+	valid := middleware.ValidateJWT(cook)
+	if !valid {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized"})
+		return
+	}
 	id := c.Param("user_id")
 
 	userID, err := strconv.Atoi(id) // Convert string ID to integer
@@ -34,6 +46,19 @@ func GetUserCourses(c *gin.Context) {
 }
 
 func GetSubscribedUsers(c *gin.Context) {
+
+	cook, err := c.Cookie("auth")
+	if err != nil {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized"})
+		return
+	}
+
+	valid := middleware.ValidateJWT(cook)
+	if !valid {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized"})
+		return
+	}
+
 	id := c.Param("course_id")
 
 	courseID, err := strconv.Atoi(id) // Convert string ID to integer
@@ -58,6 +83,19 @@ func GetSubscribedUsers(c *gin.Context) {
 }
 
 func AddSubscription(c *gin.Context) {
+
+	cook, err := c.Cookie("auth")
+	if err != nil {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized"})
+		return
+	}
+
+	valid := middleware.ValidateJWT(cook)
+	if !valid {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized"})
+		return
+	}
+
 	var body dto.SubscriptionDto
 
 	if err := c.ShouldBindJSON(&body); err != nil {

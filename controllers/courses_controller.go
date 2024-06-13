@@ -6,11 +6,24 @@ import (
 	"strings"
 
 	"github.com/DiTomasoUCC/arqui-software-I-tp-final-backend/dto"
+	"github.com/DiTomasoUCC/arqui-software-I-tp-final-backend/middleware"
 	"github.com/DiTomasoUCC/arqui-software-I-tp-final-backend/services"
 	"github.com/gin-gonic/gin"
 )
 
 func SearchCourse(c *gin.Context) {
+
+	cook, err := c.Cookie("auth")
+	if err != nil {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized"})
+		return
+	}
+
+	valid := middleware.ValidateJWT(cook)
+	if !valid {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized"})
+		return
+	}
 
 	query := strings.TrimSpace(c.Query("q"))
 	results, err := services.SearchCourse(query)
@@ -28,6 +41,19 @@ func SearchCourse(c *gin.Context) {
 }
 
 func GetCourse(c *gin.Context) {
+
+	cook, err := c.Cookie("auth")
+	if err != nil {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized"})
+		return
+	}
+
+	valid := middleware.ValidateJWT(cook)
+	if !valid {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized"})
+		return
+	}
+
 	id := c.Param("id")
 	courseID, err := strconv.Atoi(id) // Convert string ID to integer
 	if err != nil {
@@ -68,6 +94,19 @@ func GetCourse(c *gin.Context) {
 // }
 
 func AddCourse(c *gin.Context) {
+
+	cook, err := c.Cookie("auth")
+	if err != nil {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized"})
+		return
+	}
+
+	valid := middleware.ValidateJWT(cook)
+	if !valid {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized"})
+		return
+	}
+
 	var body dto.CourseDto
 
 	if err := c.ShouldBindJSON(&body); err != nil {
@@ -91,6 +130,19 @@ func AddCourse(c *gin.Context) {
 }
 
 func UpdateOneCourse(c *gin.Context) {
+
+	cook, err := c.Cookie("auth")
+	if err != nil {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized"})
+		return
+	}
+
+	valid := middleware.ValidateJWT(cook)
+	if !valid {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized"})
+		return
+	}
+
 	id := c.Param("id")
 	courseID, err := strconv.Atoi(id) // Convert string ID to integer
 	if err != nil {
@@ -119,6 +171,19 @@ func UpdateOneCourse(c *gin.Context) {
 }
 
 func DeleteCourse(c *gin.Context) {
+
+	cook, err := c.Cookie("auth")
+	if err != nil {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized"})
+		return
+	}
+
+	valid := middleware.ValidateJWT(cook)
+	if !valid {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized"})
+		return
+	}
+
 	id := c.Param("id")
 	courseID, err := strconv.Atoi(id) // Convert string ID to integer
 	if err != nil {

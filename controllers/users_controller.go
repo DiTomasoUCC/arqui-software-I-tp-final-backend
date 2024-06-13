@@ -93,9 +93,34 @@ func Logout(c *gin.Context) {
 
 func UpdateUser(c *gin.Context) {
 
+	cook, err := c.Cookie("auth")
+	if err != nil {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized"})
+		return
+	}
+
+	valid := middleware.ValidateJWT(cook)
+	if !valid {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized"})
+		return
+	}
+
 }
 
 func DeleteUser(c *gin.Context) {
+
+	cook, err := c.Cookie("auth")
+	if err != nil {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized"})
+		return
+	}
+
+	valid := middleware.ValidateJWT(cook)
+	if !valid {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized"})
+		return
+	}
+
 	id := c.Param("id")
 	userID, err := strconv.Atoi(id) // Convert string ID to integer
 	if err != nil {
