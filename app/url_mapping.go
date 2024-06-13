@@ -24,5 +24,4 @@ func mapUrls() {
 	router.GET(prefix+"subscriptions/:course_id", controllers.GetSubscribedUsers)
 	router.POST(prefix+"subscription", controllers.AddSubscription)
 
-	router.GET(prefix+"security", controllers.Security)
 }

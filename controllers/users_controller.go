@@ -96,3 +96,7 @@ func DeleteUser(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"message": "User deleted successfully"})
 
 }
+
+func GetUserCourses(c *gin.Context) {
+
+}
