@@ -11,16 +11,13 @@ import (
 )
 
 func GetUser(c *gin.Context) {
-
 	cook, err := c.Cookie("auth")
-
 	if err != nil {
 		c.JSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized"})
 		return
 	}
 
 	valid := middleware.ValidateJWT(cook)
-
 	if !valid {
 		c.JSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized"})
 		return
@@ -34,7 +31,6 @@ func GetUser(c *gin.Context) {
 	}
 
 	userDto, err := services.GetUser(userID)
-
 	if err != nil {
 		c.JSON(http.StatusNotFound, gin.H{
 			"error": err.Error(),
