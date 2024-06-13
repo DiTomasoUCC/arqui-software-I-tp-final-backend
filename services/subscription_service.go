@@ -54,8 +54,16 @@ func GetUserCourses(userId int) ([]dto.CourseDto, error) {
 
 	for _, course := range courses {
 		result = append(result, dto.CourseDto{
-			Id:   course.ID,
-			Name: course.Name,
+			Id:           course.ID,
+			Name:         course.Name,
+			Description:  course.Description,
+			InstructorId: course.InstructorID,
+			Category:     course.Category,
+			Requirements: course.Requirements,
+			Length:       course.Length,
+			ImageURL:     course.ImageURL,
+			CreationTime: course.CreationTime,
+			LastUpdated:  course.LastUpdated,
 		})
 	}
 

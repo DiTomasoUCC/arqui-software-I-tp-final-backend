@@ -20,6 +20,7 @@ func mapUrls() {
 	router.POST(prefix+"user/register", controllers.UserRegister)
 	router.POST(prefix+"user/login", controllers.UserLogin)
 	router.GET(prefix+"user/logout", controllers.Logout)
+	router.GET(prefix+"user/courses/:user_id", controllers.GetUserCourses)
 
 	//Subscriptions endpoints
 	router.GET(prefix+"subscriptions/:course_id", controllers.GetSubscribedUsers)
