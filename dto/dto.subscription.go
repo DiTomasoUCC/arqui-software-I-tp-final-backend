@@ -12,3 +12,7 @@ type SubscriptionDto struct {
 type CourseSubscriptionsResponse struct {
 	Results []UserDto `json:"results"`
 }
+
+type UserCoursesResponse struct {
+	Results []CourseDto `json:"results"`
+}

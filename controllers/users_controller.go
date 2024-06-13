@@ -86,6 +86,11 @@ func UserLogin(c *gin.Context) {
 
 }
 
+func Logout(c *gin.Context) {
+	c.SetCookie("auth", "", -1, "", "", false, true)
+	c.JSON(http.StatusOK, gin.H{"message": "Logout successfully"})
+}
+
 func UpdateUser(c *gin.Context) {
 
 }
@@ -109,13 +114,4 @@ func DeleteUser(c *gin.Context) {
 
 	c.JSON(http.StatusOK, gin.H{"message": "User deleted successfully"})
 
-}
-
-func GetUserCourses(c *gin.Context) {
-
-}
-
-func Logout(c *gin.Context) {
-	c.SetCookie("auth", "", -1, "", "", false, true)
-	c.JSON(http.StatusOK, gin.H{"message": "Logout successfully"})
 }

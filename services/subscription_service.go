@@ -42,3 +42,22 @@ func GetSubscribedUsers(courseId int) ([]dto.UserDto, error) {
 
 	return result, nil
 }
+
+func GetUserCourses(userId int) ([]dto.CourseDto, error) {
+	courses, err := clients.GetUserCourses(userId)
+
+	if err != nil {
+		return nil, fmt.Errorf("error getting user courses: %w", err)
+	}
+
+	result := make([]dto.CourseDto, 0)
+
+	for _, course := range courses {
+		result = append(result, dto.CourseDto{
+			Id:   course.ID,
+			Name: course.Name,
+		})
+	}
+
+	return result, nil
+}

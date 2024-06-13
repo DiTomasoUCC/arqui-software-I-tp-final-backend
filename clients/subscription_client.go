@@ -27,6 +27,15 @@ func GetSubscribedUsers(courseId int) ([]models.User, error) {
 	return users, nil
 }
 
+func GetUserCourses(userId int) ([]models.Course, error) {
+	var courses []models.Course
+	result := db.GetDB().Table("courses").Select("courses.*").Joins("JOIN subscriptions ON courses.id = subscriptions.course_id").Where("subscriptions.user_id = ?", userId).Find(&courses)
+	if result.Error != nil {
+		return nil, result.Error
+	}
+	return courses, nil
+}
+
 func SelectSubscription(courseId int, userId int) (models.Subscription, error) {
 	var subscription models.Subscription
 	result := db.GetDB().Where("course_id = ? AND user_id = ?", courseId, userId).First(&subscription)

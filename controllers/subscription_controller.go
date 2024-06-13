@@ -9,10 +9,29 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-// func GetCourseSubscriptions(c *gin.Context) {
-// 	id := c.Param("course_id")
+func GetUserCourses(c *gin.Context) {
+	id := c.Param("user_id")
 
-// }
+	userID, err := strconv.Atoi(id) // Convert string ID to integer
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid user ID"})
+		return
+	}
+
+	userCourses, err := services.GetUserCourses(userID)
+
+	if err != nil {
+		c.JSON(http.StatusNotFound, gin.H{
+			"error": err.Error(),
+		})
+		return
+	}
+
+	c.JSON(http.StatusOK, dto.UserCoursesResponse{
+		Results: userCourses,
+	})
+
+}
 
 func GetSubscribedUsers(c *gin.Context) {
 	id := c.Param("course_id")
