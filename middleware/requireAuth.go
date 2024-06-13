@@ -1,4 +1,4 @@
-package services
+package middleware
 
 import (
 	"fmt"
@@ -11,22 +11,22 @@ import (
 	"github.com/joho/godotenv"
 )
 
-func ValidateJWT(header string) int {
+func ValidateJWT(header string) bool {
 	errorVariables := godotenv.Load()
 	if errorVariables != nil {
-		return 0
+		return false
 
 	}
 
 	myKey := []byte(os.Getenv("SECRET_JWT"))
 
 	if len(header) == 0 {
-		return 0
+		return false
 	}
 
 	spliToken := strings.Split(header, ".")
 	if len(spliToken) != 3 {
-		return 0
+		return false
 	}
 
 	tk := strings.TrimSpace(header)
@@ -41,7 +41,7 @@ func ValidateJWT(header string) int {
 	})
 
 	if err != nil {
-		return 0
+		return false
 	}
 
 	if claims, ok := token.Claims.(jwt.MapClaims); ok && token.Valid {
@@ -49,13 +49,9 @@ func ValidateJWT(header string) int {
 
 		db.GetDB().First(&user, claims["id"])
 
-		if user.ID == 0 {
-			return 0
-		}
-
-		return 1
+		return user.ID != 0
 
 	} else {
-		return 0
+		return false
 	}
 }

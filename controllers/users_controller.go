@@ -5,11 +5,27 @@ import (
 	"strconv"
 
 	"github.com/DiTomasoUCC/arqui-software-I-tp-final-backend/dto"
+	"github.com/DiTomasoUCC/arqui-software-I-tp-final-backend/middleware"
 	"github.com/DiTomasoUCC/arqui-software-I-tp-final-backend/services"
 	"github.com/gin-gonic/gin"
 )
 
 func GetUser(c *gin.Context) {
+
+	cook, err := c.Cookie("auth")
+
+	if err != nil {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized"})
+		return
+	}
+
+	valid := middleware.ValidateJWT(cook)
+
+	if !valid {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized"})
+		return
+	}
+
 	id := c.Param("id")
 	userID, err := strconv.Atoi(id) // Convert string ID to integer
 	if err != nil {
@@ -59,7 +75,7 @@ func UserLogin(c *gin.Context) {
 		return
 	}
 
-	loginDto, err := services.LoginUser(body)
+	loginResponseDto, err := services.LoginUser(body)
 
 	if err != nil {
 		c.JSON(http.StatusNotFound, gin.H{
@@ -68,7 +84,9 @@ func UserLogin(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, loginDto)
+	c.SetCookie("auth", loginResponseDto.Token, 3600*24, "", "", false, true) //3600 seconds = 1 hour
+
+	c.JSON(http.StatusOK, loginResponseDto)
 
 }
 
@@ -99,4 +117,9 @@ func DeleteUser(c *gin.Context) {
 
 func GetUserCourses(c *gin.Context) {
 
+}
+
+func Logout(c *gin.Context) {
+	c.SetCookie("auth", "", -1, "", "", false, true)
+	c.JSON(http.StatusOK, gin.H{"message": "Logout successfully"})
 }

@@ -16,7 +16,7 @@ func SelectCourseByID(id int) (models.Course, error) {
 
 func SelectCoursesWithFilter(query string) ([]models.Course, error) {
 	var courses []models.Course
-	result := db.GetDB().Where("name LIKE ? OR description LIKE ?", "%"+query+"%", "%"+query+"%").Find(&courses)
+	result := db.GetDB().Where("name LIKE ? OR description LIKE ? OR category LIKE ?", "%"+query+"%", "%"+query+"%", "%"+query+"%").Find(&courses)
 	if result.Error != nil {
 		return nil, result.Error
 	}
