@@ -80,7 +80,8 @@ func UserLogin(c *gin.Context) {
 		return
 	}
 
-	c.SetCookie("auth", loginResponseDto.Token, 3600*24, "", "", false, true) //3600 seconds = 1 hour
+	c.SetCookie("auth", loginResponseDto.Token, 3600*24, "", "", false, true)                   //3600 seconds = 1 hour
+	c.SetCookie("user_id", strconv.Itoa(loginResponseDto.UserId), 3600*24, "", "", false, true) //3600 seconds = 1 hour
 
 	c.JSON(http.StatusOK, loginResponseDto)
 
@@ -88,6 +89,7 @@ func UserLogin(c *gin.Context) {
 
 func Logout(c *gin.Context) {
 	c.SetCookie("auth", "", -1, "", "", false, true)
+	c.SetCookie("user_id", "", -1, "", "", false, true)
 	c.JSON(http.StatusOK, gin.H{"message": "Logout successfully"})
 }
 
@@ -108,7 +110,7 @@ func DeleteUser(c *gin.Context) {
 	id := c.Param("id")
 	userID, err := strconv.Atoi(id) // Convert string ID to integer
 	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid course ID"})
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid user ID"})
 		return
 	}
 
