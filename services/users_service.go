@@ -48,7 +48,7 @@ func GetUser(id int) (dto.UserDto, error) {
 	user, err := clients.SelectUserByID(id)
 
 	if err != nil {
-		return dto.UserDto{}, fmt.Errorf("error getting course from DB: %w", err)
+		return dto.UserDto{}, fmt.Errorf("error getting user by id: %w", err)
 	}
 	return dto.UserDto{
 		UserId:       user.ID,
@@ -70,7 +70,7 @@ func CreateUser(userDto dto.UserDto) (dto.UserDto, error) {
 	user, err := clients.CreateUser(userDto.Email, userDto.Username, userDto.FirstName, userDto.LastName, userDto.UserType, userDto.PasswordHash)
 
 	if err != nil {
-		return dto.UserDto{}, fmt.Errorf("error getting course from DB: %w", err)
+		return dto.UserDto{}, fmt.Errorf("error creating user: %w", err)
 	}
 	return dto.UserDto{
 		UserId:       user.ID,
@@ -90,19 +90,19 @@ func LoginUser(loginDto dto.LoginDto) (dto.LoginResponseDto, error) {
 
 	//VER ERRORES
 	if err != nil {
-		return dto.LoginResponseDto{}, fmt.Errorf("error getting course from DB: %w", err)
+		return dto.LoginResponseDto{}, fmt.Errorf("error getting client by email: %w", err)
 	}
 
 	err = bcrypt.CompareHashAndPassword([]byte(user.PasswordHash), []byte(loginDto.Password))
 
 	if err != nil {
-		return dto.LoginResponseDto{}, fmt.Errorf("error getting course from DB: %w", err)
+		return dto.LoginResponseDto{}, fmt.Errorf("error comparing passwords: %w", err)
 	}
 
 	jwtKey, errJWT := GenerateJWT(user.Email, user.UserName, user.ID)
 
 	if errJWT != nil {
-		return dto.LoginResponseDto{}, fmt.Errorf("error getting course from DB: %w", errJWT)
+		return dto.LoginResponseDto{}, fmt.Errorf("error generating JWT: %w", errJWT)
 	}
 
 	return dto.LoginResponseDto{
@@ -115,7 +115,7 @@ func DeleteUser(id int) error {
 	err := clients.DeleteUser(id)
 
 	if err != nil {
-		return fmt.Errorf("error getting course from DB: %w", err)
+		return fmt.Errorf("eror deleting user: %w", err)
 	}
 	return nil
 }
@@ -127,7 +127,7 @@ func isUserSubscribed(user_id int, course_id int) (bool, error) {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return false, nil
 		}
-		return false, fmt.Errorf("error getting course from DB: %w", err)
+		return false, fmt.Errorf("eror getting subscription : %w", err)
 	}
 	return subscription.ID != 0, nil
 }

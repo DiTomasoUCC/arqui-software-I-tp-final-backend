@@ -62,7 +62,7 @@ func SearchCourse(query string) ([]dto.CourseDto, error) {
 	courses, err := clients.SelectCoursesWithFilter(trimmed)
 
 	if err != nil {
-		return nil, fmt.Errorf("error getting course from DB: %w", err)
+		return nil, fmt.Errorf("error searching course from DB: %w", err)
 	}
 
 	results := make([]dto.CourseDto, 0)
