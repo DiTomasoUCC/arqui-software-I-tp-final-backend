@@ -105,7 +105,7 @@ func AddCourse(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, courseDto)
+	c.JSON(http.StatusCreated, courseDto)
 
 }
 

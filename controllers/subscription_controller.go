@@ -112,6 +112,6 @@ func AddSubscription(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, subscriptionDto)
+	c.JSON(http.StatusCreated, subscriptionDto)
 
 }

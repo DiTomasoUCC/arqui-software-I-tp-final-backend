@@ -59,7 +59,7 @@ func UserRegister(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, userDto)
+	c.JSON(http.StatusCreated, userDto)
 
 }
 
