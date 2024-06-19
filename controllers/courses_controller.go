@@ -12,18 +12,6 @@ import (
 )
 
 func SearchCourse(c *gin.Context) {
-	cook, err := c.Cookie("auth")
-	if err != nil {
-		c.JSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized"})
-		return
-	}
-
-	valid := middleware.ValidateJWT(cook)
-	if !valid {
-		c.JSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized"})
-		return
-	}
-
 	query := strings.TrimSpace(c.Query("q"))
 	category := strings.TrimSpace(c.Query("category"))
 
@@ -42,7 +30,6 @@ func SearchCourse(c *gin.Context) {
 }
 
 func GetCourse(c *gin.Context) {
-
 	cook, err := c.Cookie("auth")
 	if err != nil {
 		c.JSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized"})
@@ -75,7 +62,6 @@ func GetCourse(c *gin.Context) {
 }
 
 func AddCourse(c *gin.Context) {
-
 	cook, err := c.Cookie("auth")
 	if err != nil {
 		c.JSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized"})
@@ -107,11 +93,9 @@ func AddCourse(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusCreated, courseDto)
-
 }
 
 func UpdateOneCourse(c *gin.Context) {
-
 	cook, err := c.Cookie("auth")
 	if err != nil {
 		c.JSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized"})
@@ -148,11 +132,9 @@ func UpdateOneCourse(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, courseDto)
-
 }
 
 func DeleteCourse(c *gin.Context) {
-
 	cook, err := c.Cookie("auth")
 	if err != nil {
 		c.JSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized"})
@@ -182,5 +164,4 @@ func DeleteCourse(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, gin.H{"message": "Course deleted successfully"})
-
 }
