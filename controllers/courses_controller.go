@@ -49,7 +49,14 @@ func GetCourse(c *gin.Context) {
 		return
 	}
 
-	courseDto, err := services.GetCourseWithBool(1, courseID)
+	user := strings.TrimSpace(c.Query("userId"))
+	userID, err := strconv.Atoi(user) // Convert string ID to integer
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid user ID"})
+		return
+	}
+
+	courseDto, err := services.GetCourseWithBool(userID, courseID)
 
 	if err != nil {
 		c.JSON(http.StatusNotFound, gin.H{
