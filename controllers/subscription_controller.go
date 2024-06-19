@@ -42,11 +42,9 @@ func GetUserCourses(c *gin.Context) {
 	c.JSON(http.StatusOK, dto.UserCoursesResponse{
 		Results: userCourses,
 	})
-
 }
 
 func GetSubscribedUsers(c *gin.Context) {
-
 	cook, err := c.Cookie("auth")
 	if err != nil {
 		c.JSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized"})
@@ -79,11 +77,9 @@ func GetSubscribedUsers(c *gin.Context) {
 	c.JSON(http.StatusOK, dto.CourseSubscriptionsResponse{
 		Results: subscribedUsers,
 	})
-
 }
 
 func AddSubscription(c *gin.Context) {
-
 	cook, err := c.Cookie("auth")
 	if err != nil {
 		c.JSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized"})
@@ -113,5 +109,4 @@ func AddSubscription(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusCreated, subscriptionDto)
-
 }

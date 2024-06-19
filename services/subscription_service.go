@@ -8,6 +8,16 @@ import (
 )
 
 func AddSubscription(subscriptionDto dto.SubscriptionDto) (dto.SubscriptionDto, error) {
+	isSubscribed, err := isUserSubscribed(subscriptionDto.UserId, subscriptionDto.CourseId)
+
+	if err != nil {
+		return dto.SubscriptionDto{}, fmt.Errorf("error getting subscription: %w", err)
+	}
+
+	if isSubscribed {
+		return dto.SubscriptionDto{}, fmt.Errorf("user is already subscribed to this course")
+	}
+
 	subscription, err := clients.CreateSubscription(subscriptionDto.CourseId, subscriptionDto.UserId)
 
 	if err != nil {

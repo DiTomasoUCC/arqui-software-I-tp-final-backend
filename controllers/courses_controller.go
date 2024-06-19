@@ -12,21 +12,10 @@ import (
 )
 
 func SearchCourse(c *gin.Context) {
-
-	cook, err := c.Cookie("auth")
-	if err != nil {
-		c.JSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized"})
-		return
-	}
-
-	valid := middleware.ValidateJWT(cook)
-	if !valid {
-		c.JSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized"})
-		return
-	}
-
 	query := strings.TrimSpace(c.Query("q"))
-	results, err := services.SearchCourse(query)
+	category := strings.TrimSpace(c.Query("category"))
+
+	results, err := services.SearchCourse(query, category)
 
 	if err != nil {
 		c.JSON(http.StatusNotFound, gin.H{
@@ -41,7 +30,6 @@ func SearchCourse(c *gin.Context) {
 }
 
 func GetCourse(c *gin.Context) {
-
 	cook, err := c.Cookie("auth")
 	if err != nil {
 		c.JSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized"})
@@ -61,7 +49,14 @@ func GetCourse(c *gin.Context) {
 		return
 	}
 
-	courseDto, err := services.GetCourseWithBool(1, courseID)
+	user := strings.TrimSpace(c.Query("userId"))
+	userID, err := strconv.Atoi(user) // Convert string ID to integer
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid user ID"})
+		return
+	}
+
+	courseDto, err := services.GetCourseWithBool(userID, courseID)
 
 	if err != nil {
 		c.JSON(http.StatusNotFound, gin.H{
@@ -74,7 +69,6 @@ func GetCourse(c *gin.Context) {
 }
 
 func AddCourse(c *gin.Context) {
-
 	cook, err := c.Cookie("auth")
 	if err != nil {
 		c.JSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized"})
@@ -106,11 +100,9 @@ func AddCourse(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusCreated, courseDto)
-
 }
 
 func UpdateOneCourse(c *gin.Context) {
-
 	cook, err := c.Cookie("auth")
 	if err != nil {
 		c.JSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized"})
@@ -147,11 +139,9 @@ func UpdateOneCourse(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, courseDto)
-
 }
 
 func DeleteCourse(c *gin.Context) {
-
 	cook, err := c.Cookie("auth")
 	if err != nil {
 		c.JSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized"})
@@ -181,5 +171,4 @@ func DeleteCourse(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, gin.H{"message": "Course deleted successfully"})
-
 }

@@ -56,10 +56,11 @@ func GetCourse(id int) (dto.CourseDto, error) {
 	}, nil
 }
 
-func SearchCourse(query string) ([]dto.CourseDto, error) {
+func SearchCourse(query string, category string) ([]dto.CourseDto, error) {
 	trimmed := strings.TrimSpace(query)
+	categoryTrimmed := strings.TrimSpace(category)
 
-	courses, err := clients.SelectCoursesWithFilter(trimmed)
+	courses, err := clients.SelectCoursesWithFilter(trimmed, categoryTrimmed)
 
 	if err != nil {
 		return nil, fmt.Errorf("error searching course from DB: %w", err)
