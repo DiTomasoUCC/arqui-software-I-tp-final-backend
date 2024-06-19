@@ -12,7 +12,6 @@ import (
 )
 
 func SearchCourse(c *gin.Context) {
-
 	cook, err := c.Cookie("auth")
 	if err != nil {
 		c.JSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized"})
@@ -26,7 +25,9 @@ func SearchCourse(c *gin.Context) {
 	}
 
 	query := strings.TrimSpace(c.Query("q"))
-	results, err := services.SearchCourse(query)
+	category := strings.TrimSpace(c.Query("category"))
+
+	results, err := services.SearchCourse(query, category)
 
 	if err != nil {
 		c.JSON(http.StatusNotFound, gin.H{
