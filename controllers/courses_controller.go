@@ -81,6 +81,12 @@ func AddCourse(c *gin.Context) {
 		return
 	}
 
+	user := middleware.GetUserIdFromJWT(cook)
+	if user == 0 {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized"})
+		return
+	}
+
 	var body dto.CourseDto
 
 	if err := c.ShouldBindJSON(&body); err != nil {
@@ -88,9 +94,7 @@ func AddCourse(c *gin.Context) {
 		return
 	}
 
-	//Validar Datos en services? (Ver tema de validacion de InstructorID)
-
-	courseDto, err := services.AddCourse(body)
+	courseDto, err := services.AddCourse(body, user)
 
 	if err != nil {
 		c.JSON(http.StatusNotFound, gin.H{
@@ -122,6 +126,12 @@ func UpdateOneCourse(c *gin.Context) {
 		return
 	}
 
+	user := middleware.GetUserIdFromJWT(cook)
+	if user == 0 {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized"})
+		return
+	}
+
 	var body dto.CourseDto
 
 	if err := c.ShouldBindJSON(&body); err != nil {
@@ -129,7 +139,7 @@ func UpdateOneCourse(c *gin.Context) {
 		return
 	}
 
-	courseDto, err := services.UpdateCourse(courseID, body)
+	courseDto, err := services.UpdateCourse(courseID, body, user)
 
 	if err != nil {
 		c.JSON(http.StatusNotFound, gin.H{
@@ -161,7 +171,13 @@ func DeleteCourse(c *gin.Context) {
 		return
 	}
 
-	err = services.DeleteCourse(courseID)
+	user := middleware.GetUserIdFromJWT(cook)
+	if user == 0 {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized"})
+		return
+	}
+
+	err = services.DeleteCourse(courseID, user)
 
 	if err != nil {
 		c.JSON(http.StatusNotFound, gin.H{

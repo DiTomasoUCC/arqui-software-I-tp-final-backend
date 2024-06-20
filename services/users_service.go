@@ -131,3 +131,13 @@ func isUserSubscribed(user_id int, course_id int) (bool, error) {
 	}
 	return subscription.ID != 0, nil
 }
+
+func isAdminUser(user_id int) (bool, error) {
+	user, err := clients.SelectUserByID(user_id)
+
+	if err != nil {
+		return false, fmt.Errorf("error getting user by id: %w", err)
+	}
+
+	return user.UserType, nil
+}

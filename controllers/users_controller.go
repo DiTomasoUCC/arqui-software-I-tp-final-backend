@@ -39,7 +39,6 @@ func GetUser(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, userDto)
-
 }
 
 func UserRegister(c *gin.Context) {
@@ -60,7 +59,6 @@ func UserRegister(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusCreated, userDto)
-
 }
 
 func UserLogin(c *gin.Context) {
@@ -84,7 +82,6 @@ func UserLogin(c *gin.Context) {
 	c.SetCookie("user_id", strconv.Itoa(loginResponseDto.UserId), 3600*24, "", "", false, true) //3600 seconds = 1 hour
 
 	c.JSON(http.StatusOK, loginResponseDto)
-
 }
 
 func Logout(c *gin.Context) {
@@ -94,7 +91,6 @@ func Logout(c *gin.Context) {
 }
 
 func DeleteUser(c *gin.Context) {
-
 	cook, err := c.Cookie("auth")
 	if err != nil {
 		c.JSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized"})
@@ -114,6 +110,12 @@ func DeleteUser(c *gin.Context) {
 		return
 	}
 
+	user := middleware.GetUserIdFromJWT(cook)
+	if user != userID {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized"})
+		return
+	}
+
 	err = services.DeleteUser(userID)
 
 	if err != nil {
@@ -124,5 +126,4 @@ func DeleteUser(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, gin.H{"message": "User deleted successfully"})
-
 }
