@@ -5,9 +5,8 @@ import "github.com/DiTomasoUCC/arqui-software-I-tp-final-backend/controllers"
 var prefix = "/api/v1/"
 
 func mapUrls() {
-
 	//Courses endpoints
-	router.GET(prefix+"courses/search", controllers.SearchCourse) //example: http://localhost:8080/api/v1/courses/search?q=Go_lang_Course
+	router.GET(prefix+"courses/search", controllers.SearchCourse)
 	router.GET(prefix+"course/:id", controllers.GetCourse)
 	router.POST(prefix+"course", controllers.AddCourse)
 	router.PUT(prefix+"course/:id", controllers.UpdateOneCourse)
@@ -25,4 +24,7 @@ func mapUrls() {
 	router.GET(prefix+"subscriptions/:course_id", controllers.GetSubscribedUsers)
 	router.POST(prefix+"subscription", controllers.AddSubscription)
 
+	// Comments endpoints
+	router.GET(prefix+"comments/:course_id", controllers.GetComments)
+	router.POST(prefix+"comments", controllers.AddComment)
 }

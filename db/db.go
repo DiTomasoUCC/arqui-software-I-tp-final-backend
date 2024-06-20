@@ -39,7 +39,7 @@ func ConnectDatabase() error {
 	}
 
 	fmt.Println(db)
-	err = db.AutoMigrate(&models.User{}, &models.Course{}, &models.Subscription{}, &models.Activity{}, &models.Review{})
+	err = db.AutoMigrate(&models.User{}, &models.Course{}, &models.Subscription{}, &models.Activity{}, &models.Comment{})
 	if err != nil {
 		return fmt.Errorf("failed to auto-migrate: %w", err)
 	}
