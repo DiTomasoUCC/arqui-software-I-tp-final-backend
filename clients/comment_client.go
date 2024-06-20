@@ -5,12 +5,17 @@ import (
 	"github.com/DiTomasoUCC/arqui-software-I-tp-final-backend/models"
 )
 
-func GetComments(courseID int) ([]models.Comment, error) {
-	var comments []models.Comment
+func GetComments(courseID int) ([]models.CommentQuery, error) {
+	var comments []models.CommentQuery
 
-	result := db.GetDB().Select("comments.*, users.user_name as user_name").
-		Joins("left join users on users.id = comments.user_id").
-		Where("comments.course_id = ?", courseID).Find(&comments)
+	// Use Raw SQL query to join comments with users and select user_name
+	result := db.GetDB().Raw(`
+		SELECT comments.*, users.user_name AS user_name
+		FROM comments
+		LEFT JOIN users ON users.id = comments.user_id
+		WHERE comments.course_id = ?
+		ORDER BY comments.creation_time DESC
+	`, courseID).Scan(&comments)
 
 	if result.Error != nil {
 		return nil, result.Error
