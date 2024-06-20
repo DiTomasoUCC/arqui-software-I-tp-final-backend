@@ -4,6 +4,7 @@ import (
 	"net/http"
 	"strconv"
 	"strings"
+	"time"
 
 	"github.com/DiTomasoUCC/arqui-software-I-tp-final-backend/dto"
 	"github.com/DiTomasoUCC/arqui-software-I-tp-final-backend/middleware"
@@ -187,4 +188,25 @@ func DeleteCourse(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, gin.H{"message": "Course deleted successfully"})
+}
+
+func UploadFile(c *gin.Context) {
+	file, err := c.FormFile("file")
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	//naming file
+	var extension = strings.Split(file.Filename, ".")[1]
+	time := strings.Split(time.Now().String(), " ")
+	f := string(time[4][6:14]) + "." + extension
+	var archive = "uploads/" + f
+
+	c.SaveUploadedFile(file, archive)
+
+	c.JSON(http.StatusCreated, gin.H{
+		"message": "File uploaded successfully",
+		"file":    f,
+	})
 }
