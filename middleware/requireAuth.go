@@ -55,3 +55,17 @@ func ValidateJWT(header string) bool {
 		return false
 	}
 }
+
+func GetUserIdFromJWT(header string) int {
+	myKey := []byte(os.Getenv("SECRET_JWT"))
+
+	tk := strings.TrimSpace(header)
+
+	token, _ := jwt.Parse(tk, func(token *jwt.Token) (interface{}, error) {
+		return myKey, nil
+	})
+
+	claims, _ := token.Claims.(jwt.MapClaims)
+
+	return int(claims["id"].(float64))
+}

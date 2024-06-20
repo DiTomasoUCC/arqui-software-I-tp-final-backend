@@ -26,6 +26,7 @@ func GetCourseWithBool(user_id int, course_id int) (dto.GetCourseResponse, error
 		Name:         course.Name,
 		Description:  course.Description,
 		InstructorId: course.InstructorID,
+		InstructorName: course.InstructorName,
 		Category:     course.Category,
 		Requirements: course.Requirements,
 		Length:       course.Length,
@@ -86,7 +87,17 @@ func SearchCourse(query string, category string) ([]dto.CourseDto, error) {
 	return results, nil
 }
 
-func AddCourse(courseDto dto.CourseDto) (dto.CourseDto, error) {
+func AddCourse(courseDto dto.CourseDto, user int) (dto.CourseDto, error) {
+	isAdmin, err := isAdminUser(user)
+
+	if err != nil {
+		return dto.CourseDto{}, fmt.Errorf("error checking if user is admin: %w", err)
+	}
+
+	if !isAdmin {
+		return dto.CourseDto{}, fmt.Errorf("user is not an admin")
+	}
+	
 	course, err := clients.CreateCourse(courseDto.Name, courseDto.Description, courseDto.InstructorId, courseDto.Category, courseDto.Requirements, courseDto.Length, courseDto.ImageURL)
 
 	if err != nil {
@@ -107,7 +118,17 @@ func AddCourse(courseDto dto.CourseDto) (dto.CourseDto, error) {
 	}, nil
 }
 
-func UpdateCourse(id int, body dto.CourseDto) (dto.CourseDto, error) {
+func UpdateCourse(id int, body dto.CourseDto, user int) (dto.CourseDto, error) {
+	isAdmin, err := isAdminUser(user)
+
+	if err != nil {
+		return dto.CourseDto{}, fmt.Errorf("error checking if user is admin: %w", err)
+	}
+
+	if !isAdmin {
+		return dto.CourseDto{}, fmt.Errorf("user is not an admin")
+	}
+
 	course, err := clients.UpdateCourse(id, body.Name, body.Description, body.Category, body.Requirements, body.Length, body.ImageURL)
 
 	if err != nil {
@@ -153,8 +174,18 @@ func UpdateCourse(id int, body dto.CourseDto) (dto.CourseDto, error) {
 	}, nil
 }
 
-func DeleteCourse(id int) error {
-	err := clients.DeleteCourse(id)
+func DeleteCourse(id int, user int) error {
+	isAdmin, err := isAdminUser(user)
+
+	if err != nil {
+		return fmt.Errorf("error checking if user is admin: %w", err)
+	}
+
+	if !isAdmin {
+		return fmt.Errorf("user is not an admin")
+	}
+
+	err = clients.DeleteCourse(id)
 
 	if err != nil {
 		return fmt.Errorf("error deleting course from DB: %w", err)

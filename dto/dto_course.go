@@ -22,6 +22,7 @@ type GetCourseResponse struct {
 	Name         string `json:"course_name"`
 	Description  string `json:"description"`
 	InstructorId int    `json:"instructor_id"`
+	InstructorName string `json:"instructor_name"`
 	Category     string `json:"category"`
 	Requirements string `json:"requirements"`
 	Length       int    `json:"length"`
