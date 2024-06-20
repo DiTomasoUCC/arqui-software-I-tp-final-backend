@@ -7,7 +7,11 @@ import (
 
 func SelectCourseByID(id int) (models.Course, error) {
 	var course models.Course
-	result := db.GetDB().Where("id = ?", id).First(&course)
+
+	result := db.GetDB().Select("courses.*, users.user_name as instructor_name").
+		Joins("left join users on users.id = courses.instructor_id").
+		Where("courses.id = ?", id).Find(&course)
+
 	if result.Error != nil {
 		return models.Course{}, result.Error
 	}

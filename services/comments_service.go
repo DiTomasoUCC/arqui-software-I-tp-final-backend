@@ -23,6 +23,7 @@ func GetComments(courseID int) ([]dto.CommentDto, error) {
 			UserId:       comment.UserID,
 			Comment:      comment.Comment,
 			CreationTime: comment.CreationTime,
+			UserName: 	 	comment.UserName,
 		})
 	}
 

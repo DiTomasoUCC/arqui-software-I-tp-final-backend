@@ -26,6 +26,7 @@ func GetCourseWithBool(user_id int, course_id int) (dto.GetCourseResponse, error
 		Name:         course.Name,
 		Description:  course.Description,
 		InstructorId: course.InstructorID,
+		InstructorName: course.InstructorName,
 		Category:     course.Category,
 		Requirements: course.Requirements,
 		Length:       course.Length,

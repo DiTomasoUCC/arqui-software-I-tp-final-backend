@@ -10,6 +10,7 @@ type Course struct {
 	Name         string
 	Description  string
 	InstructorID int // Foreign key referencing User.ID
+	InstructorName string
 	Category     string
 	Requirements string
 	Length       int // Duration in hours

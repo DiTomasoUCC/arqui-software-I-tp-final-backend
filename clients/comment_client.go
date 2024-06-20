@@ -7,7 +7,11 @@ import (
 
 func GetComments(courseID int) ([]models.Comment, error) {
 	var comments []models.Comment
-	result := db.GetDB().Where("course_id = ?", courseID).Find(&comments)
+
+	result := db.GetDB().Select("comments.*, users.user_name as user_name").
+		Joins("left join users on users.id = comments.user_id").
+		Where("comments.course_id = ?", courseID).Find(&comments)
+
 	if result.Error != nil {
 		return nil, result.Error
 	}
