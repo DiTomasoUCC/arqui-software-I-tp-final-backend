@@ -201,7 +201,7 @@ func DeleteCourse(c *gin.Context) {
 
 func UploadFile(c *gin.Context) {
 
-	id := c.Param("id")
+	id := c.Param("course_id")
 
 	file, err := c.FormFile("file")
 	if err != nil {
