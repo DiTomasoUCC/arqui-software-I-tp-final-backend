@@ -29,5 +29,5 @@ func mapUrls() {
 	router.POST(prefix+"comments", controllers.AddComment)
 
 	//Upload example
-	router.POST(prefix+"upload", controllers.UploadFile)
+	router.POST(prefix+"upload/:id", controllers.UploadFile)
 }

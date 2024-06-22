@@ -104,6 +104,15 @@ func AddCourse(c *gin.Context) {
 		return
 	}
 
+	//Create folder for course files
+	err = services.CreateCourseFolder(courseDto.Id)
+	if err != nil {
+		c.JSON(http.StatusNotFound, gin.H{
+			"error": err.Error(),
+		})
+		return
+	}
+
 	c.JSON(http.StatusCreated, courseDto)
 }
 
@@ -191,6 +200,9 @@ func DeleteCourse(c *gin.Context) {
 }
 
 func UploadFile(c *gin.Context) {
+
+	id := c.Param("id")
+
 	file, err := c.FormFile("file")
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
@@ -201,7 +213,7 @@ func UploadFile(c *gin.Context) {
 	var extension = strings.Split(file.Filename, ".")[1]
 	time := strings.Split(time.Now().String(), " ")
 	f := string(time[4][6:14]) + "." + extension
-	var archive = "uploads/" + f
+	var archive = "public/" + id + "/" + f
 
 	c.SaveUploadedFile(file, archive)
 

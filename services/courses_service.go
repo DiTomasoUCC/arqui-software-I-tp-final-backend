@@ -2,6 +2,8 @@ package services
 
 import (
 	"fmt"
+	"os"
+	"strconv"
 	"strings"
 
 	"github.com/DiTomasoUCC/arqui-software-I-tp-final-backend/clients"
@@ -22,18 +24,18 @@ func GetCourseWithBool(user_id int, course_id int) (dto.GetCourseResponse, error
 	}
 
 	return dto.GetCourseResponse{
-		Id:           course.ID,
-		Name:         course.Name,
-		Description:  course.Description,
-		InstructorId: course.InstructorID,
+		Id:             course.ID,
+		Name:           course.Name,
+		Description:    course.Description,
+		InstructorId:   course.InstructorID,
 		InstructorName: course.InstructorName,
-		Category:     course.Category,
-		Requirements: course.Requirements,
-		Length:       course.Length,
-		ImageURL:     course.ImageURL,
-		CreationTime: course.CreationTime,
-		LastUpdated:  course.LastUpdated,
-		IsSubscribed: isSubscribed,
+		Category:       course.Category,
+		Requirements:   course.Requirements,
+		Length:         course.Length,
+		ImageURL:       course.ImageURL,
+		CreationTime:   course.CreationTime,
+		LastUpdated:    course.LastUpdated,
+		IsSubscribed:   isSubscribed,
 	}, nil
 }
 
@@ -97,7 +99,7 @@ func AddCourse(courseDto dto.CourseDto, user int) (dto.CourseDto, error) {
 	if !isAdmin {
 		return dto.CourseDto{}, fmt.Errorf("user is not an admin")
 	}
-	
+
 	course, err := clients.CreateCourse(courseDto.Name, courseDto.Description, courseDto.InstructorId, courseDto.Category, courseDto.Requirements, courseDto.Length, courseDto.ImageURL)
 
 	if err != nil {
@@ -191,5 +193,14 @@ func DeleteCourse(id int, user int) error {
 		return fmt.Errorf("error deleting course from DB: %w", err)
 	}
 
+	return nil
+}
+
+func CreateCourseFolder(courseID int) error {
+	id := strconv.Itoa(courseID)
+	err := os.MkdirAll("public/"+id, 0755)
+	if err != nil {
+		return fmt.Errorf("error creating course folder: %w", err)
+	}
 	return nil
 }
