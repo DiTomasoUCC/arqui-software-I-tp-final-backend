@@ -1,8 +1,11 @@
 package services
 
 import (
+	"archive/zip"
 	"fmt"
+	"io"
 	"os"
+	"path/filepath"
 	"strconv"
 	"strings"
 
@@ -203,4 +206,57 @@ func CreateCourseFolder(courseID int) error {
 		return fmt.Errorf("error creating course folder: %w", err)
 	}
 	return nil
+}
+
+func ZipFolder(folderPath string, zipPath string) error {
+	zipFile, err := os.Create(zipPath)
+	if err != nil {
+		return err
+	}
+	defer zipFile.Close()
+
+	zipWriter := zip.NewWriter(zipFile)
+	defer zipWriter.Close()
+
+	err = filepath.Walk(folderPath, func(path string, info os.FileInfo, err error) error { // Walk through the folder
+		if err != nil {
+			return err
+		}
+
+		// Create a header based on the file info
+		header, err := zip.FileInfoHeader(info)
+		if err != nil {
+			return err
+		}
+
+		// Adjust the header name to maintain the folder structure in the zip file
+		header.Name, err = filepath.Rel(filepath.Dir(folderPath), path)
+		if err != nil {
+			return err
+		}
+
+		// Create the header in the zip file
+		writer, err := zipWriter.CreateHeader(header)
+		if err != nil {
+			return err
+		}
+
+		// If it's a directory, we don't need to copy the file contents
+		if info.IsDir() {
+			return nil
+		}
+
+		// Open the file to copy its contents
+		file, err := os.Open(path)
+		if err != nil {
+			return err
+		}
+		defer file.Close()
+
+		// Copy the file contents to the zip file
+		_, err = io.Copy(writer, file)
+		return err
+	})
+
+	return err
 }

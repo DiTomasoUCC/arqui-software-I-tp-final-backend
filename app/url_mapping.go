@@ -30,5 +30,5 @@ func mapUrls() {
 
 	//Upload example
 	router.POST(prefix+"upload/:course_id", controllers.UploadFile)
-	router.Static(prefix+"/public", "./public")
+	router.GET(prefix+"download/:course_id", controllers.ZipFolder)
 }

@@ -2,6 +2,8 @@ package controllers
 
 import (
 	"net/http"
+	"os"
+	"path/filepath"
 	"strconv"
 	"strings"
 	"time"
@@ -223,16 +225,23 @@ func UploadFile(c *gin.Context) {
 	})
 }
 
-// func GetFiles(c *gin.Context) {
-// 	id := c.Param("course_id")
+func ZipFolder(c *gin.Context) {
 
-// 	files, err := services.GetFiles(id)
-// 	if err != nil {
-// 		c.JSON(http.StatusNotFound, gin.H{
-// 			"error": err.Error(),
-// 		})
-// 		return
-// 	}
+	id := c.Param("course_id")
+	zipname := id + "-zip.zip"
 
-// 	c.JSON(http.StatusOK, files)
-// }
+	folderPath := "./public/" + id
+	zipPath := "./public/" + zipname
+
+	err := services.ZipFolder(folderPath, zipPath)
+
+	if err != nil {
+		c.String(http.StatusInternalServerError, "Failed to create zip file: %s", err.Error())
+		return
+	}
+	defer os.Remove(zipPath) // Clean up the zip file after sending it
+
+	c.Header("Content-Type", "application/zip")
+	c.Header("Content-Disposition", "attachment; filename="+filepath.Base(zipPath))
+	c.File(zipPath)
+}
