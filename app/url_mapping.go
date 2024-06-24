@@ -27,4 +27,8 @@ func mapUrls() {
 	// Comments endpoints
 	router.GET(prefix+"comments/:course_id", controllers.GetComments)
 	router.POST(prefix+"comments", controllers.AddComment)
+
+	//Upload example
+	router.POST(prefix+"upload/:course_id", controllers.UploadFile)
+	router.GET(prefix+"download/:course_id", controllers.ZipFolder)
 }
