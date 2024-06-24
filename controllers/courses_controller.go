@@ -226,14 +226,25 @@ func UploadFile(c *gin.Context) {
 }
 
 func ZipFolder(c *gin.Context) {
-
 	id := c.Param("course_id")
-	zipname := id + "-zip.zip"
+	courseID, err := strconv.Atoi(id) // Convert string ID to integer
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid course ID"})
+		return
+	}
+
+	courseName, err := services.GetCourseName(courseID)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid course ID"})
+		return
+	}
+
+	zipname := courseName + ".zip"
 
 	folderPath := "./public/" + id
 	zipPath := "./public/" + zipname
 
-	err := services.ZipFolder(folderPath, zipPath)
+	err = services.ZipFolder(folderPath, zipPath)
 
 	if err != nil {
 		c.String(http.StatusInternalServerError, "Failed to create zip file: %s", err.Error())

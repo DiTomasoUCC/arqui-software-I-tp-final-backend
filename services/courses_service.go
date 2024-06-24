@@ -179,6 +179,16 @@ func UpdateCourse(id int, body dto.CourseDto, user int) (dto.CourseDto, error) {
 	}, nil
 }
 
+func GetCourseName(id int) (string, error) {
+	course, err := clients.SelectCourseByID(id)
+
+	if err != nil {
+		return "", fmt.Errorf("error getting course from DB: %w", err)
+	}
+
+	return course.Name, nil
+}
+
 func DeleteCourse(id int, user int) error {
 	isAdmin, err := isAdminUser(user)
 
