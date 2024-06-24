@@ -222,3 +222,17 @@ func UploadFile(c *gin.Context) {
 		"file":    f,
 	})
 }
+
+// func GetFiles(c *gin.Context) {
+// 	id := c.Param("course_id")
+
+// 	files, err := services.GetFiles(id)
+// 	if err != nil {
+// 		c.JSON(http.StatusNotFound, gin.H{
+// 			"error": err.Error(),
+// 		})
+// 		return
+// 	}
+
+// 	c.JSON(http.StatusOK, files)
+// }
