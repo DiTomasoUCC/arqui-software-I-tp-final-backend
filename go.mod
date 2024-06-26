@@ -1,6 +1,6 @@
 module github.com/DiTomasoUCC/arqui-software-I-tp-final-backend
 
-go 1.22.1
+go 1.22
 
 require (
 	github.com/gin-contrib/cors v1.7.2
